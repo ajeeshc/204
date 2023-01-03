@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: milestone
+  labels: {{- include "deployment.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {{- include "deployment.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "deployment.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "ajeesh.azurecr.io/net6simpledocker:2.3"
+          imagePullPolicy: IfNotPresent
+      {{- with .Values.nodeSelector }}
+      nodeSelector:   {{- toYaml . | nindent 9 }}
+      {{- end }}
+    
